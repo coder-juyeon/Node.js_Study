@@ -1,0 +1,18 @@
+REPL - 코드를 바로 실행
+	터미널에 node라고 치기
+
+	.editor
+	-> 여러줄 코드 가능
+	ctrl + d
+	-> 여러줄 코드 실행
+	.exit
+	-> 터미널로 나감
+
+js 파일 - 특정 기능을 담은 하나의 파일 실행
+
+npm 파일이름
+-> description
+
+npm install express
+
+express : 미들웨어

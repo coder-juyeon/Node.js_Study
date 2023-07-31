@@ -1,0 +1,121 @@
+단일 스레드javaScript
+이벤트 루프 개념을 통해 계속해서 작동되면서 이벤트가 바랭하면 사용
+요청이 두개라면 요청 처리 빨르ㅗ 운영체제 영향적 약간의 다중 스레드 사용
+루프는 꼭 creasteSErver가 계속해서 리스너를 생성 node.js 계속됨
+process.exit ->
+
+<요청>
+응답 유형
+암호화 응답 축소 대역폭 아낌
+쿠키
+사용된 http 버전 정보
+
+알아야 하는 필드
+   req.url
+   req.method
+   req.headers
+
+<응답>
+데이터 기록
+res.write('')
+res.end() -> 클라이언트로 전송
+
+
+요청과 응답 연결
+url 파싱
+const url = req.url;
+
+if(url === '/'){
+
+}
+
+POST
+
+req.on('data', () => {})
+새 청크가 읽힐때마다 데이터 이벤트가 발생하는 데에 버퍼가 도움을 준다.
+
+
+const 하면 =은 사용못함 대신 .push() 사용해주기
+예)
+const body = []
+body = (x)
+body.push()
+
+req.on('end')
+들어오는 요청 데이터 혹은 들어오는 전반적인 요청을 분석한 후에 발생
+
+버퍼
+청크를 다루기 위해 필요함
+
+chunk: <Buffer 6d 65 73 73 61 67 65 3d 6d 61 79 62 65>
+message=maybe
+-> 여기서 message가 나오는 이유는 form 이 모든 입력 데이터와 함꼐 자동으로 요청을 보내 요청 객체에
+키-값 쌍으로 넣어서
+
+35. 이벤트 기반 코드 실행의 이해
+Node.js에 이벤트와 이벤트 리스터에 작성한 명부가 있다
+요청 분석 완료 후 명부를 보면서 이벤트 리스너를 봐야겠다
+핸들러
+
+
+
+36. 블로킹 및 논블로킹 코드
+sync 동기화 writeFileSync 파일 운영이 완료될때까지 코드가 멈춤
+
+
+
+37. Node.js 백그라운드 확인
+이벤트 루프 
+-> 빨리 끝낼 수 있는 코드 콜백만을 다룸
+-> Node.js를 계속 실행하도록 하는 루프
+I/O : input output
+timercallback -> PendingCallback -> poll -> Check -> CloseCallback -> process.exit
+-> 내가 이해한 거로는 비동기 작업이 끝나면 이벤트 큐에 결과가 들어가고
+   이벤트 큐에 있는 비동기 작업 결과를 호출 스택으로 이동시켜서(푸시해서)
+   호출 스택에서 콜백함수가 실행되서 결과를 처리한다
+-> 즉 이 방법으로 I/O 작업이 완료될 때까지 기다리지 않고, 다른 작업 처리가 가능하다.
+
+워커풀
+-> 무거운 작업을 담당 다른 여러 스레드에서 작동
+-> javascript 코드에서 분리됨
+
+
+
+38. 모듈 시스템 적용
+// app.js 서버를 구동하는 역할
+// 불러오기와 내보내기를 통해 routes.js파일로 연결
+// 외부에서 읽을 수 있는 내용만 내보내기 가능
+
+<routes.js>
+// 만약 여러개를 내보내기 할 때
+// 첫번째방법
+module.exports = {
+  handler: requestHandler,
+  someText: 'Some hard coded text';
+}
+// app.js에서 routes.handler routes.someText로 접근
+
+// 두번째 방법
+module.exports.handler = requestHandler;
+module.exports.someText = 'Some hard coded text';
+// exports 생략 가능 그러면 javascript가 아닌 Node.js에서 처리함
+
+res.setHeader('Location', '/');
+-> 루트 URL로 리다이렉션 코드
+
+
+
+39. 마무리
+Node.js코드는 논블로킹 방식으로 실행
+콜백과 이벤트 등록 하면 특정 작업이 끝난 후에 Node.js가 그 코드를 실행시킴
+논블로킹 방식을 사용하면 단일 스레드로 여러 작업을 동시에 처리할 수 있음 
+즉 Node.js에서는 js 코드가 논블로킹 방식이여야 하므로 콜백이나 이벤트 함수들이 많이 사용됨
+한 res가 끝난 다음에 다른 응답을 보내지 않아야 함 -> 어떤 코드는 바로 실행되지 않음
+예) 이벤트 리스너의 경우 바로 실행되지 않음
+
+코어모듈
+예) http	
+require로 불러옴 
+불러온 파일 내에서만 사용 가능
+다른 파일 or 모듈에서 내보낸 것을 변수로 저장 가능
+예) const routes = require('./routes');

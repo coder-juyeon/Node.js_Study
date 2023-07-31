@@ -1,0 +1,117 @@
+58. express.js란?
+바디를 추출하기 위해 직접 이벤트 엔드 이벤트 문자열로 변환 버퍼 생성 
+파싱을 대신해 주기 위한 프로젝트ㅡ 내부에 다른 패키지를 쉽게 설치하도록 도와줌
+애플리케이션을 정의하는 코드 고유의 장점에 집중
+무거운 작업 -> 프레임워크로 처리
+프레임워크 : 일련의 도움 모음
+
+<Express.js 대안>
+Vanilla Node.js
+Adonis.js PHP Laravel 형 프레임워크
+Koa
+Sails.js
+
+express 장점
+유연함
+높은 확장성
+새로 구성할 필요 없이 쉽게 Node Express 애플리케이션에 추가 가능
+
+59. Express.js 설치
+
+
+<routes.js>
+const http = require('http');
+const fs = require('fs');
+
+const requestHandler = (req, res) => {
+    const url = req.url;
+    const method = req.method;
+    if (url === '/') {
+        res.write('<html>');
+        res.write('<head><title>Enter Message</title><head>');
+        res.write(
+          '<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>'
+        );
+        res.write('</html>');
+        return res.end();
+      }
+      if (url === '/message' && method === 'POST') {
+        const body = [];
+        req.on('data', chunk => {
+          console.log(chunk);
+          body.push(chunk);
+        });
+        return req.on('end', () => {
+          const parsedBody = Buffer.concat(body).toString();
+          const message = parsedBody.split('=')[1];
+          // 파일에 메시지를 저장한 후에는 루트 URL로 리다이렉션
+          // 즉  URL인 /로 감
+          fs.writeFile('message.txt', message, err => {
+            res.statusCode = 302;
+            res.setHeader('Location', '/');
+            return res.end();
+          });
+        });
+    }
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.write('<html>');
+    res.write('<head><title>My First Page</title><head>');
+    res.write('<body><h1>Hello from my Node.js Server!</h1></body>');
+    res.write('</html>');
+    res.end();
+};
+
+module.exports = requestHandler;
+
+// 만약 여러개를 내보내기 할 때
+// 첫번째방법
+// module.exports = {
+//   handler: requestHandler,
+//   someText: 'Some hard coded text';
+// }
+// app.js에서 routes.handler routes.someText로 접근
+
+// 두번째 방법
+// module.exports.handler = requestHandler;
+// module.exports.someText = 'Some hard coded text';
+// exports 생략 가능 그러면 javascript가 아닌 Node.js에서 처리함
+
+npm install --save express
+const express = require('express');
+
+
+60. 미들웨어 추가
+app.use((req, res, next) => {
+    console.log('In the middleware!');
+    next(); //다음 라인에 있는 미들웨어 이동
+});
+
+
+62. Express.js 백그라운드 확인
+// const server = http.createServer(app);
+// server.listen(3000);
+// 두개를 더 짧게 가능
+app.listen(3000);
+// const http = require('http');
+-> 얘도 없어도 됨
+
+
+63. 다른 라우트 사용법
+next()는 자제하기
+기본
+app.use('/', (req, res, next) => {
+    console.log('This always runs!');
+    next();
+});
+
+64. 수신 요청 분석
+npm install --save body-parser
+
+65. POST 요청으로 미들웨어 실행 제한
+app.get
+app.post
+
+66. Express 라우터 사용
+다양한 경로와 http 메서드에 대해 실행할 라우팅 관련 코드를 파일에 담아서 routes 폴더에 저장
+		
